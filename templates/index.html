@@ -7,6 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
         <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" />
+        <base href="{% static '' %}">
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
@@ -25,7 +26,7 @@
             <div class="header__left">
                 <i id="menu" class="material-icons">menu</i>
                 <a href="index.html">
-                    <img src="https://www.xda-developers.com/files/2017/08/After-12-Years-Google-Gives-YouTube-a-New-Logo-1900x700_c.png" alt="">
+                    <img src="images/Fetish Channel.png" alt="">
                 </a>
             </div>
             <!-- Header menu end -->
@@ -142,7 +143,7 @@
                     {% for v in video %}
                     <div class="video">
                         <div class="video__thumbnail">
-                            <img src="{{v.image.url}}" alt="">
+                            <a href="{% url 'video-detail' v.id %}"><img src="{{v.image.url}}" alt=""></a>
                         </div>
                         <div class="video__details">
                             <div class="author">
@@ -150,7 +151,7 @@
                                 <img src="{% static 'images/logo.jpg' %}" alt="">
                             </div>
                             <div class="title">
-                                <h3>{{v.title|truncatechars:35}}</h3>
+                                <a href="{% url 'video-detail' v.id %}"><h3>{{v.title|truncatechars:35}}</h3></a>
                                 <a href=""><small>Desphixs <i class="fas fa-check-circle"></i></small></a>
                                 <span><small>{{v.views}} Views . {{v.date|timesince}} ago</small></span>
                             </div>

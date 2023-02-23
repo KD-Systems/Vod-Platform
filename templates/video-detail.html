@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -5,8 +7,9 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
-        <link rel="stylesheet" href="css/style.css" type="text/css" />
-        <link rel="stylesheet" href="css/video.css" type="text/css" />
+        <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" />
+        <link rel="stylesheet" href="{% static 'css/video.css' %}" type="text/css" />
+        <base href="{% static '' %}">
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
@@ -65,20 +68,24 @@
                     <div class="left_content">
                         <video controls>
                             <source
-                                src="video/Charlie Puth - Done For Me.MKV"
+                                src="{{ video.video.url }}"
                                 type="video/mp4"
                                 poster="images/1.jpg"
                             />
                         </video>
 
                         <div class="tag">
-                            <label for="" class="tags">#vodplatform #frontend #python</label>
-                            <p>Vod platform using HTML, CSS, JS</p>
+                            <label for="" class="tags">
+                                {% for tag in video.tags.all %}
+                                    #{{tag.name}}
+                                {% endfor %}
+                            </label>
+                            <p>{{video.title}}</p>
                         </div>
 
                         <div class="view flex2 border_bottom">
                             <div class="view-text">
-                                <span>123, 234 Views</span>
+                                <span>{{ video.views }} Views</span>
                             </div>
 
                             <div class="flex">
@@ -131,7 +138,7 @@
                                 <span>2.4K Subscribers</span>
 
                                 <h5>
-                                    Vod Platform using HTML, CSS, and JS and it will be responsive
+                                    {{ video.description }}
                                 </h5>
                                 <span><i class="fa fa-caret-down"></i> show more</span>
                             </div>
