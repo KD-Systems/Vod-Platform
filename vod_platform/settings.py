@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     # My Own Apps
     'core',
     'userauths',
+    'channel',
 
     # Third Party Apps
     'import_export',
