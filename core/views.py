@@ -1,6 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from core.models import Video
+from django.http import HttpResponse, JsonResponse
+from channel.models import Channel
+from core.models import Video, Comment
+from django.db.models import Count
+from django.views.decorators.csrf import csrf_exempt
 
 
 # from userauths.models import Profile
@@ -30,12 +33,36 @@ def videoDetail(request, pk):
     # similar_videos = similar_videos.annotate(same_tags=Count("tags")).order_by("-same_tags", "-date")[:25]
 
     # Getting all comment related to a video
-    # comment = Comment.objects.filter(active=True, video=video).order_by("-date")
+    comment = Comment.objects.filter(active=True, video=video).order_by("-date")
 
     context = {
         "video":video,
         # "channel":channel,
-        # "comment":comment,
+        "comment":comment,
         # "similar_videos":similar_videos,
     }
     return render(request, "video-detail.html", context)
+
+def ajax_save_comment(request):
+    if request.method == "POST":
+        pk = request.POST.get("id")
+
+        comment = request.POST.get("comment")
+        video = Video.objects.get(id=pk)
+        user = request.user
+
+        new_comment = Comment.objects.create(comment=comment, user=user, video=video)
+        new_comment.save()
+
+        response = "Comment Posted"
+        return HttpResponse(response)
+
+@csrf_exempt
+def ajax_delete_comment(request):
+    if request.method == "POST":
+        id = request.POST.get("cid")
+        comment = Comment.objects.get(id=id)
+        comment.delete()
+        return JsonResponse({"status":1})
+    else:
+        return JsonResponse({"status":2})

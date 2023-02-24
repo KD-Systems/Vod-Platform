@@ -58,16 +58,21 @@
                 <div class="sidebar__categories">
                     
                     <!-- Single Category -->
-                    <a href="index.html">
+                    <!-- <a href="index.html">
                         <div class="sidebar__category">
                             <i class="material-icons">home</i>
                             <span>Home</span>
                         </div>
-                    </a>
+                    </a> -->
+                    <div class="sidebar__category">
+                        <i class="material-icons">home</i>
+                        <span>Home</span>
+                    </div>
 
                     <!-- Single Category -->
                     <div class="sidebar__category">
-                        <i class="material-icons">local_fire_department</i>
+                        <!-- <i class="material-icons">local_fire_department</i> -->
+                        <i class="material-icons">trending_up</i>
                         <span>Trending</span>
                     </div>
 
@@ -93,12 +98,16 @@
                     </div>
 
                     <!-- Single Category -->
-                    <a href="channel-videos.html">
+                    <!-- <a href="channel-videos.html">
                         <div class="sidebar__category">
                             <i class="material-icons">play_arrow</i>
                             <span>Your Videos</span>
                         </div>
-                    </a>
+                    </a> -->
+                    <div class="sidebar__category">
+                        <i class="material-icons">play_arrow</i>
+                        <span>Your Videos</span>
+                    </div>
 
                     <!-- Single Category -->
                     <div class="sidebar__category">
@@ -148,11 +157,11 @@
                         <div class="video__details">
                             <div class="author">
                                 <!-- <img src="images/logo.jpg" alt=""> -->
-                                <img src="{% static 'images/logo.jpg' %}" alt="">
+                                <img src="{{ v.user.channel.image.url}}" alt="">
                             </div>
                             <div class="title">
                                 <a href="{% url 'video-detail' v.id %}"><h3>{{v.title|truncatechars:35}}</h3></a>
-                                <a href=""><small>{{v.user.channel.channel_name}} <i class="fas fa-check-circle"></i></small></a>
+                                <a href=""><small>{{v.user.channel.channel_name}} {% if v.user.channel.verified == True %}<i class="fas fa-check-circle"></i>{% endif %}</small></a>
                                 <span><small>{{v.views}} Views . {{v.date|timesince}} ago</small></span>
                             </div>
                         </div>
