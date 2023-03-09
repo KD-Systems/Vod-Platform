@@ -13,9 +13,6 @@
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
-            integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
-            crossorigin="anonymous"
-            referrerpolicy="no-referrer"
         />
         <link
             href="https://fonts.googleapis.com/css2?family=Material+Icons"
@@ -26,6 +23,17 @@
             rel="stylesheet"
         />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
+        <style>
+            .unsubscribe-btn{
+                background-color: gray;
+                color: #fff;
+                cursor: pointer;
+            }
+            #sub_btn {
+                cursor: pointer;
+            }
+        </style>
     </head>
     <body>
         <div class="header">
@@ -91,10 +99,8 @@
 
                             <div class="flex">
                                 <div class="icon">
-                                    <a href=""
-                                        ><i class="fa fa-thumbs-up"></i
-                                    ></a>
-                                    <label for="">5k</label>
+                                    <button id="like-button" onclick="addlike()"><i class="fa fa-thumbs-up"></i></button>
+                                    <label for=""><span id="like-count"></span></label>
                                 </div>
                                 <div class="icon">
                                     <a href=""
@@ -138,7 +144,8 @@
                                     <small><i class="fa fa-check-circle"></i></small>
                                     {% endif %}
                                 </h4>
-                                <span>{{ video.user.channel.subscribers.all.count}} Subscribers</span>
+                                <!-- <span>{{ video.user.channel.subscribers.all.count}} Subscribers</span> -->
+                                <span id="count"></span> <span>Subscribers</span>
 
                                 <h5>
                                     {{ video.description }}
@@ -146,7 +153,8 @@
                                 <span><i class="fa fa-caret-down"></i> show more</span>
                             </div>
                             <div>
-                                <a href="" class="subscribe-btn">Subscribe</a>
+                                <!-- <a href="" class="subscribe-btn">Subscribe</a> -->
+                                <button  id="sub_btn" onclick="addsub()" class="subscribe-btn">Subscribe</button>
                             </div>
                         </div>
 
@@ -165,7 +173,7 @@
                             <div class="img">
                                 <img src="https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-portrait-176256935.jpg" alt="">
                             </div>
-                            {% if request.user.is_authenticated %}
+                            
                             <form action="" style="width: 100%;" id="comment_form">
                                 {% csrf_token %}
                                 <div class="heading flex">
@@ -174,64 +182,8 @@
                                     <button ><i class="material-icons">send</i></button>
                                 </div>
                             </form>
-                            {% else %}
-                            <a href="{% url 'sign-in' %}" style="margin-top: 10px;">*Login To Comment</a>
-                            {% endif %}
+                            
                         </div>
-
-                        <!-- <div class="details comment_self flex">
-                            <div class="img">
-                                <img  src="https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-portrait-176256935.jpg" alt="">
-                            </div>
-                            <div class="heading">
-                                <input type="text" placeholder="Add a comment..." />
-                            </div>
-                        </div> -->
-
-                        <!-- For check below code -->
-                        <!-- <div id="comment-wrapper">
-                            {% for c in comment %}
-                            <div class="comment-tray">
-                                <div class="details_Comment">
-                                    <div class="details flex">
-                                        <div class="img">
-                                            <img  src="https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-portrait-176256935.jpg" alt="">
-                                        </div>
-                                        <div class="heading">
-                                            <h4><b>{{c.user.username|title}}</b> &nbsp; •<span>{{c.date|timesince}} ago</span></h4>
-                                            <p>{{c.comment}}</p>
-                                            <div class="comment-like flex"> -->
-
-                                                <!-- <div class="icon">
-                                                    <i class="fa fa-thumbs-up"></i>
-                                                    <label for=""><small>2</small></label>
-                                                </div>
-        
-                                                <div class="icon">
-                                                    <i class="fa fa-thumbs-down"></i>
-                                                    <label for=""><small>Dislike</small></label>
-                                                </div> -->
-        
-                                                <!-- <div class="icon">
-                                                    <label for=""><a><small>Reply</small></a></label>
-                                                </div> -->
-
-                                                <!-- {% if c.user == request.user %}
-                                                <div class="icon">
-                                                    <input type="hidden" value="{{ c.id }}" name="" id="">
-                                                    <label for=""><button data-cid={{c.id}} class="btn-del" style="color: red;"><small>Delete</small></button></label>
-                                                </div>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
-
-                                <!-- <hr>
-                            </div>
-                            {% endfor %}
-                        </div> -->
-                        <!-- End Check -->
 
                         <div id="comment-wrapper">
                             {% for c in comment %}
@@ -247,7 +199,7 @@
                                             <div class="comment-like flex">
                                                 <div class="icon">
                                                     <i class="fa fa-thumbs-up"></i>
-                                                    <label for="">5</label>
+                                                    <label for="">5k</label>
                                                 </div>
                                                 <div class="icon">
                                                     <i class="fa fa-thumbs-down"></i>
@@ -459,4 +411,62 @@
             }
         })
     });
+</script>
+
+<!-- Subscribe Feature -->
+<script>
+    let subcounter = document.getElementById('count')
+    sub_button = document.getElementById('sub_btn')
+    subscriber_added = []
+
+    function addsub(){
+        // sub_button.classList.add('loading')
+        axios.get('{% url "add_sub" video.user.id %}')
+        .then(response =>{
+                this.response = response.data;
+                sub_button.innerHTML =  this.response;
+                loadsub()
+                // sub_button.classList.remove('loading')
+                sub_button.classList.toggle("unsubscribe-btn")
+        })
+    }
+
+    function loadsub(){
+        axios.get('{% url "sub_load" channel.pk %}')
+        .then(response =>{
+                this.response = response.data;
+                subscriber_added = this.response
+                subcounter.innerHTML = subscriber_added.length
+        })
+    }
+    window.onload = loadsub();
+</script>
+
+<!-- Like Feature -->
+<script>
+    let likescounter = document.getElementById('like-count')
+    like_button = document.getElementById('like-button')
+    likes_added = []
+    
+    function addlike(){
+        axios.get('{% url "add_like" video.id %}')
+        .then(like_response =>{
+                this.like_response = like_response.data;
+                like_button.innerHTML =  this.like_response;
+                loadlike()
+                // sub_button.classList.remove('loading')
+                // sub_button.classList.toggle("unsubscribe-btn")
+        })
+    }
+    
+    function loadlike(){
+        axios.get('{% url "like_load" video.id %}')
+        .then(like_response =>{
+                this.like_response = like_response.data;
+                likes_added = this.like_response
+                likescounter.innerHTML = likes_added.length    
+        })
+    }
+    
+    window.onload = loadlike();
 </script>

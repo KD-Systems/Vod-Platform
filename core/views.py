@@ -19,7 +19,7 @@ def index(request):
 
 def videoDetail(request, pk):
     video = Video.objects.get(id=pk)
-    # channel = Channel.objects.get(user=video.user)
+    channel = Channel.objects.get(user=video.user)
     
     # channel.total_views = channel.total_views + 1
     # channel.save()
@@ -34,14 +34,28 @@ def videoDetail(request, pk):
 
     # Getting all comment related to a video
     comment = Comment.objects.filter(active=True, video=video).order_by("-date")
-
+    # channel = Channel.objects.get(user=video.user)
+    
     context = {
         "video":video,
-        # "channel":channel,
+        "channel":channel,
         "comment":comment,
         # "similar_videos":similar_videos,
     }
     return render(request, "video-detail.html", context)
+
+# def save_video(request, video_id):
+#     video = Video.objects.get(id=video_id)
+
+#     user = request.user.profile
+#     # user = Profile.objects.get(user=request.user)
+
+#     if video in user.saved_videos.all():
+#         user.saved_videos.remove(video)
+#     else:
+#         user.saved_videos.add(video)
+#     return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+
 
 def ajax_save_comment(request):
     if request.method == "POST":
@@ -66,3 +80,96 @@ def ajax_delete_comment(request):
         return JsonResponse({"status":1})
     else:
         return JsonResponse({"status":2})
+
+# Subscribe Functions
+def add_new_subscribers(request, id):
+    subscribers = Channel.objects.get(id=id)
+    user = request.user
+
+    # if user > [channel Subscribers]
+    if user in subscribers.subscribers.all():
+        subscribers.subscribers.remove(user)
+        response = "Subscribe"
+        return JsonResponse(response, safe=False, status=200)
+    else:
+        subscribers.subscribers.add(user)
+        response = "Unsubscribe"
+        return JsonResponse(response, safe=False, status=200)
+
+# Load channel subs
+def load_channel_subs(request, id):
+    subscribers = Channel.objects.get(id=id)
+    sub_lists = list(subscribers.subscribers.values())
+    return JsonResponse(sub_lists, safe=False, status=200)
+
+def add_new_like(request, id):
+    video = Video.objects.get(id=id)
+    user = request.user
+
+    if user in video.likes.all():
+        video.likes.remove(user)
+        # like_response = '<i class="fa fa-thumbs-up"></i>'
+        like_response = "Like"
+        return JsonResponse(like_response, safe=False, status=200)
+    else:
+        video.likes.add(user)
+        # like_response = '<i class="fa fa-thumbs-up"></i>'
+        like_response = "Dislike"
+        return JsonResponse(like_response, safe=False, status=200)
+
+def load_video_likes(request, id):
+    video = Video.objects.get(id=id)
+    likes_lists = list(video.likes.values())
+    return JsonResponse(likes_lists, safe=False, status=200)
+
+
+# def searchView(request):
+#     video = Video.objects.filter(visibility="public").order_by("-date")
+#     query = request.GET.get("q")
+#     if query:
+#         video = video.filter(
+#             Q(title__icontains=query)|
+#             Q(description__icontains=query)
+#         ).distinct()
+    
+#     context = {
+#         "video":video,
+#         "query":query,
+
+#     }
+#     return render(request, "search.html", context)
+
+    
+# def tag_list(request, tag_slug=None):
+#     video = Video.objects.filter(visibility="public").order_by("-date")
+
+#     tag = None
+#     if tag_slug:
+#         tag = get_object_or_404(Tag, slug=tag_slug)
+#         video = video.filter(tags__in=[tag])
+
+#     context = {
+#     "video":video,
+#     "tag":tag,
+
+#     }
+#     return render(request, "tags.html", context)
+
+
+# def trending(request):
+#     video = Video.objects.filter(visibility="public").order_by("-views")
+#     context = {
+#         "video":video
+#     }
+#     return render(request, "trending.html", context)
+    
+
+# def savedVideos(request):
+#     try:
+#         video = request.user.profile.saved_videos.all()
+#     except:
+#         video = None
+#     context = {
+#         "video":video
+#     }
+#     return render(request, "saved-video.html", context)

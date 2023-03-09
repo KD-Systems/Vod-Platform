@@ -24,7 +24,7 @@ class Video(models.Model):
     visibility = models.CharField(choices=VISIBILITY, max_length=100, default="public")
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     views = models.PositiveIntegerField(default=0)
-    # likes = models.ManyToManyField(User, related_name="likes")
+    likes = models.ManyToManyField(User, related_name="likes")
 
     # # Add Featured Field
     # featured = models.BooleanField(default=False)
