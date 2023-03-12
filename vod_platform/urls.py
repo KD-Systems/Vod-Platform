@@ -8,7 +8,12 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", include("core.urls"))
+    path("", include("core.urls")),
+
+    path("c/", include("channel.urls")),
+    # path("user/", include("userauths.urls")),
+    # path("studio/", include("useradmin.urls")),
+    # path("", index)
 ]
 
 if settings.DEBUG:

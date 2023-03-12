@@ -21,8 +21,8 @@ def videoDetail(request, pk):
     video = Video.objects.get(id=pk)
     channel = Channel.objects.get(user=video.user)
     
-    # channel.total_views = channel.total_views + 1
-    # channel.save()
+    channel.total_views = channel.total_views + 1
+    channel.save()
 
     video.views = video.views + 1
     video.save()
