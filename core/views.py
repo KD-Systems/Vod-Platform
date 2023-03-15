@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from channel.models import Channel
 from core.models import Video, Comment
 from django.db.models import Count
@@ -44,17 +44,17 @@ def videoDetail(request, pk):
     }
     return render(request, "video-detail.html", context)
 
-# def save_video(request, video_id):
-#     video = Video.objects.get(id=video_id)
+def save_video(request, video_id):
+    video = Video.objects.get(id=video_id)
 
-#     user = request.user.profile
-#     # user = Profile.objects.get(user=request.user)
+    user = request.user.profile
+    # user = Profile.objects.get(user=request.user)
 
-#     if video in user.saved_videos.all():
-#         user.saved_videos.remove(video)
-#     else:
-#         user.saved_videos.add(video)
-#     return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+    if video in user.saved_videos.all():
+        user.saved_videos.remove(video)
+    else:
+        user.saved_videos.add(video)
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
 
 def ajax_save_comment(request):

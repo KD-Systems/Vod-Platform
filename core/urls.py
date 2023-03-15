@@ -20,8 +20,8 @@ urlpatterns = [
     path("add-like/<int:id>/", views.add_new_like, name="add_like"),
     path("likes-load/<int:id>/", views.load_video_likes, name="like_load"),
 
-    # # Saving Video TO Profile
-    # path("save-video/<video_id>/", views.save_video, name="save-video"),
+    # Saving Video TO Profile
+    path("save-video/<video_id>/", views.save_video, name="save-video"),
 
     # # Search URL
     # path("video/search/", views.searchView, name="search"),
