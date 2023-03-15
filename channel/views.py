@@ -1,11 +1,9 @@
-from django.shortcuts import render, get_object_or_404
-# from django.shortcuts import render, get_object_or_404, redirect
-from channel.models import Channel
-# from channel.models import Channel, Community, CommunityComment
+from django.shortcuts import render, get_object_or_404, redirect
+from channel.models import Channel, Community, CommunityComment
 from core.models import Video
-# from django.contrib import messages
-# from django.http import HttpResponse, HttpResponseRedirect
-# from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 # from channel.forms import VideoForm, CommunityForm
 
 
@@ -52,68 +50,68 @@ def channel_about(request, channel_name):
     return render(request, "channel/channel-about.html", context)
 
 
-# def channel_community(request, channel_name):
-#     channel = get_object_or_404(Channel, id=channel_name)
-#     community = Community.objects.filter(channel=channel, status="active").order_by("-date")
+def channel_community(request, channel_name):
+    channel = get_object_or_404(Channel, id=channel_name)
+    community = Community.objects.filter(channel=channel, status="active").order_by("-date")
 
-#     context = {
-#         "community":community,
-#         "channel":channel,
-#     }
+    context = {
+        "community":community,
+        "channel":channel,
+    }
 
-#     return render(request, "channel/channel-community.html", context)
-
-
-# def channel_community_detail(request, channel_name, community_id):
-#     channel = get_object_or_404(Channel, id=channel_name)
-#     community = Community.objects.get(channel=channel, id=community_id, status="active")
-
-#     # Listing all Comments for a community post
-#     comments = CommunityComment.objects.filter(active=True, community=community).order_by("-date")
-
-#     context = {
-#         "community":community,
-#         "comments":comments,
-#         "channel":channel,
-#     }
-
-#     return render(request, "channel/channel-community-detail.html", context)
+    return render(request, "channel/channel-community.html", context)
 
 
-# @login_required
-# def create_comment(request, community_id):
+def channel_community_detail(request, channel_name, community_id):
+    channel = get_object_or_404(Channel, id=channel_name)
+    community = Community.objects.get(channel=channel, id=community_id, status="active")
 
-#     if request.method == "POST":
-#         community = Community.objects.get(id=community_id, status="active")
-#         comment = request.POST.get("comment")
-#         user = request.user 
+    # Listing all Comments for a community post
+    comments = CommunityComment.objects.filter(active=True, community=community).order_by("-date")
 
-#         new_comment = CommunityComment.objects.create(community=community, user=user, comment=comment)
-#         new_comment.save()
-#         messages.success(request, f"Comment Posted.")
-#         return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+    context = {
+        "community":community,
+        "comments":comments,
+        "channel":channel,
+    }
 
-# @login_required
-# def delete_comment(request, community_id, comment_id):
-#     community = Community.objects.get(id=community_id)
-#     comment = CommunityComment.objects.get(id=comment_id, community=community)
+    return render(request, "channel/channel-community-detail.html", context)
 
-#     comment.delete()
-#     messages.success(request, f"Comment Deleted.")
 
-#     return redirect("channel-community-detail", community.channel.id, community.id)
+@login_required
+def create_comment(request, community_id):
 
-# @login_required
-# def like_community_post(request, community_id):
-#     community = Community.objects.get(id=community_id)
-#     user = request.user
+    if request.method == "POST":
+        community = Community.objects.get(id=community_id, status="active")
+        comment = request.POST.get("comment")
+        user = request.user 
 
-#     if user in community.likes.all():
-#         community.likes.remove(user)
-#     else:
-#         community.likes.add(user)
+        new_comment = CommunityComment.objects.create(community=community, user=user, comment=comment)
+        new_comment.save()
+        messages.success(request, f"Comment Posted.")
+        return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+
+@login_required
+def delete_comment(request, community_id, comment_id):
+    community = Community.objects.get(id=community_id)
+    comment = CommunityComment.objects.get(id=comment_id, community=community)
+
+    comment.delete()
+    messages.success(request, f"Comment Deleted.")
+
+    return redirect("channel-community-detail", community.channel.id, community.id)
+
+@login_required
+def like_community_post(request, community_id):
+    community = Community.objects.get(id=community_id)
+    user = request.user
+
+    if user in community.likes.all():
+        community.likes.remove(user)
+    else:
+        community.likes.add(user)
     
-#     return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
 # @login_required
 # def video_upload(request):
