@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
-	<title>New Login Page</title>
+	<title>Vod Signup Page</title>
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/normalize.css' %}">
@@ -87,23 +87,23 @@
                                         </div>
 
                                         <div class="row input-inline-field">
-                                                <div id="reg_passwordDiv" class="input-field col s6">
-                                                    {{form.password1}}
-                                                    <!-- <input name="password" required id="reg_pass_word" type="password" class="validate" onkeyup="validate()"> -->
-                                                    <label for="reg_pass_word">Password</label>
-                                                    <a href="javascript:void(0)" class="showPassword" onclick="showPassword()"><i class="material-icons md-18">visibility</i></a>
-                                                </div>
-                                                
-                                                <div id="rePasswordDiv" class="input-field col s6">
-                                                    {{form.password2}}
-                                                    <!-- <input name="password2" required id="re_pass_word" type="password" class="validate" onkeyup="validate()"> -->
-                                                    <label for="re_pass_word">Confirm</label>
-                                                </div>
+                                            <div id="reg_passwordDiv" class="input-field col s6">
+                                                {{form.password1}}
+                                                <!-- <input name="password" required id="reg_pass_word" type="password" class="validate" onkeyup="validate()"> -->
+                                                <label for="reg_pass_word">Password</label>
+                                                <a href="javascript:void(0)" class="showPassword" onclick="showPassword()"><i class="material-icons md-18">visibility</i></a>
+                                            </div>
+                                            
+                                            <div id="rePasswordDiv" class="input-field col s6">
+                                                {{form.password2}}
+                                                <!-- <input name="password2" required id="re_pass_word" type="password" class="validate" onkeyup="validate()"> -->
+                                                <label for="re_pass_word">Confirm</label>
+                                            </div>
 
-                                                <div class="input-field col s12 mar-no">
-                                                    <div id="validation-txt"></div>
-                                                    <span class="helper-text" data-error="wrong" data-success="right">Use 8 or more characters with a mix of letters, numbers & symbols</span>
-                                                </div>
+                                            <div class="input-field col s12 mar-no">
+                                                <div id="validation-txt"></div>
+                                                <span class="helper-text" data-error="wrong" data-success="right">Use 8 or more characters with a mix of letters, numbers & symbols</span>
+                                            </div>
                                         </div>
                                         <p>I have an account <a href="{% url 'sign-in' %}" class="backToLogin">Login Now</a></p>
                                     </div>
