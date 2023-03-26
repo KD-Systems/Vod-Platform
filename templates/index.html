@@ -28,7 +28,7 @@
             <!-- Header menu Start -->
             <div class="header__left">
                 <i id="menu" class="material-icons">menu</i>
-                <a href="index.html">
+                <a href="{% url 'index' %}">
                     <img src="images/Fetish Channel.png" alt="">
                 </a>
             </div>
@@ -46,7 +46,7 @@
             <!-- Header Icons Start -->
             <div class="header__icons">
                 <i class="material-icons display-this">search</i>
-                <i class="material-icons ">videocam</i>
+                <a href="{% url 'upload-video' %}"><i class="material-icons ">videocam</i></a>
                 <i class="material-icons">apps</i>
                 <i class="material-icons display-this">notifications</i>
                 <a href="channel.html"><i id="drop-down" class="material-icons display-this">account_circle</i></a>
@@ -61,7 +61,7 @@
                 <div class="sidebar__categories">
                     
                     <!-- Single Category -->
-                    <!-- <a href="index.html">
+                    <!-- <a href="{% url 'index' %}">
                         <div class="sidebar__category">
                             <i class="material-icons">home</i>
                             <span>Home</span>

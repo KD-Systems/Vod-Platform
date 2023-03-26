@@ -4,7 +4,7 @@ from core.models import Video
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-# from channel.forms import VideoForm, CommunityForm
+from channel.forms import VideoForm, CommunityForm
 
 
 
@@ -113,24 +113,25 @@ def like_community_post(request, community_id):
     
     return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
-# @login_required
-# def video_upload(request):
-#     user = request.user
-#     if request.method == "POST":
-#         form = VideoForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             new_form = form.save(commit=False)
-#             new_form.user = user
-#             new_form.save()
-#             form.save_m2m()
-#             messages.success(request, f"Video Uploaded Successfully.")
-#             return redirect("studio")
-#     else:
-#         form = VideoForm()
-#     context = {
-#         "form":form,
-#     }
-#     return render(request, "channel/upload-video.html", context)
+@login_required
+def video_upload(request):
+    user = request.user
+    if request.method == "POST":
+        form = VideoForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_form = form.save(commit=False)
+            new_form.user = user
+            new_form.save()
+            form.save_m2m()
+            messages.success(request, f"Video Uploaded Successfully.")
+            # return redirect("studio")
+            return redirect("channel-profile", user.channel.id)
+    else:
+        form = VideoForm()
+    context = {
+        "form":form,
+    }
+    return render(request, "channel/upload-video.html", context)
 
 
 

@@ -40,11 +40,10 @@
             <!--Header Menu Start-->
             <div class="header__left">
                 <i id="menu" class="material-icons">menu</i>
-                <!-- <img
-                    src="https://www.xda-developers.com/files/2017/08/After-12-Years-Google-Gives-YouTube-a-New-Logo-1900x700_c.png"
-                    alt=""
-                /> -->
-                <img src="images/Fetish Channel.png" alt="">
+                
+                <a href="{% url 'index' %}">
+                    <img src="images/Fetish Channel.png" alt="">
+                </a>
             </div>
             <!--Header Menu End-->
 
@@ -60,7 +59,7 @@
             <!--Header Icon Start-->
             <div class="header__icons">
                 <i class="material-icons display-this">search</i>
-                <i class="material-icons display-this">videocam</i>
+                <a href="{% url 'upload-video' %}"><i class="material-icons ">videocam</i></a>
                 <i class="material-icons display-this">apps</i>
                 <i class="material-icons display-this">notifications</i>
                 <i id="drop-down" class="material-icons display-this"
@@ -248,73 +247,28 @@
                         <button class="chat">Show Chat Reply</button>
                         <div class="tags">
                             <label for="" class="tags-bg">All</label>
-                            <label for="" class="tags-bg">Wib Design</label>
-                            <label for="" class="tags-bg">Frontend</label>
-                            <label for="" class="tags-bg">HTML</label>
+                            <label for="" class="tags-bg">Telegu</label>
+                            <label for="" class="tags-bg">Turkey</label>
+                            <label for="" class="tags-bg">France</label>
                         </div>
 
+                        {% for s in similar_videos %}
                         <div class="video_items video_sidebar flex">
                             <a href="">
-                                <img src="images/1.png" alt="" />
+                                {% if s.image %}
+                                <img src="{{s.image.url}}" alt="" >
+                                {% else %}
+                                <img src="http://127.0.0.1:8000/watch/1/" alt="">
+                                {% endif %}
                             </a>
                             <div class="details">
-                                <p>Vod Platform using HTML, CSS and JS</p>
-                                <span><i class="fa fa-check-circle"></i></span>
-                                <span>203K Views . 1 Week Ago</span>
+                                <a href="{% url 'video-detail' s.id %}"><p><b>{{s.title|truncatechars:40}}</b></p></a>
+                                <span>{{s.user.channel.channel_name}} {% if s.user.channel.verified == True %}<i class="fa fa-check-circle"></i> {% endif %}</span>
+                                <span><small>{{s.views}} Views . {{s.date|timesince}} Ago</small> </span>
                             </div>
                         </div>
-
-                        <div class="video_items video_sidebar flex">
-                            <a href="">
-                                <img src="images/1.png" alt="" />
-                            </a>
-                            <div class="details">
-                                <p>Vod Platform using HTML, CSS and JS</p>
-                                <span><i class="fa fa-check-circle"></i></span>
-                                <span>203K Views . 1 Week Ago</span>
-                            </div>
-                        </div>
-
-                        <div class="video_items video_sidebar flex">
-                            <a href="">
-                                <img src="images/1.png" alt="" />
-                            </a>
-                            <div class="details">
-                                <p>Vod Platform using HTML, CSS and JS</p>
-                                <span><i class="fa fa-check-circle"></i></span>
-                                <span>203K Views . 1 Week Ago</span>
-                            </div>
-                        </div>
-                        <div class="video_items video_sidebar flex">
-                            <a href="">
-                                <img src="images/1.png" alt="" />
-                            </a>
-                            <div class="details">
-                                <p>Vod Platform using HTML, CSS and JS</p>
-                                <span><i class="fa fa-check-circle"></i></span>
-                                <span>203K Views . 1 Week Ago</span>
-                            </div>
-                        </div>
-                        <div class="video_items video_sidebar flex">
-                            <a href="">
-                                <img src="images/1.png" alt="" />
-                            </a>
-                            <div class="details">
-                                <p>Vod Platform using HTML, CSS and JS</p>
-                                <span><i class="fa fa-check-circle"></i></span>
-                                <span>203K Views . 1 Week Ago</span>
-                            </div>
-                        </div>
-                        <div class="video_items video_sidebar flex">
-                            <a href="">
-                                <img src="images/1.png" alt="" />
-                            </a>
-                            <div class="details">
-                                <p>Vod Platform using HTML, CSS and JS</p>
-                                <span><i class="fa fa-check-circle"></i></span>
-                                <span>203K Views . 1 Week Ago</span>
-                            </div>
-                        </div>
+                        {% endfor %}
+                        
                     </div>
                 </div>
             </section>

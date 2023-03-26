@@ -28,9 +28,12 @@ def videoDetail(request, pk):
     video.save()
 
     # Suggesting Video
-    # video_tags_id = video.tags.values_list("id", flat=True)
-    # similar_videos = Video.objects.filter(tags__in=video_tags_id).exclude(id=video.id)
-    # similar_videos = similar_videos.annotate(same_tags=Count("tags")).order_by("-same_tags", "-date")[:25]
+    video_tags_id = video.tags.values_list("id", flat=True)
+    similar_videos = Video.objects.filter(tags__in=video_tags_id).exclude(id=video.id)
+    similar_videos = similar_videos.annotate(same_tags=Count("tags")).order_by("-same_tags", "-date")[:25]
+
+    similar = Video.objects.filter(visibility="public").order_by("-date")
+
 
     # Getting all comment related to a video
     comment = Comment.objects.filter(active=True, video=video).order_by("-date")
@@ -40,7 +43,7 @@ def videoDetail(request, pk):
         "video":video,
         "channel":channel,
         "comment":comment,
-        # "similar_videos":similar_videos,
+        "similar_videos":similar,
     }
     return render(request, "video-detail.html", context)
 
