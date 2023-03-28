@@ -132,7 +132,7 @@
                     <!-- Single Category -->
                     <a href="{% url 'sign-in' %}">
                         <div class="sidebar__category">
-                            <i class="material-icons">login</i>
+                            <i class="material-icons">input</i>
                             <span>Login</span>
                         </div>
                     </a>
@@ -189,8 +189,8 @@
                         </div>
                         <div class="video__details">
                             <div class="author">
-                                <!-- <img src="images/logo.jpg" alt=""> -->
-                                <img src="{{ v.user.channel.image.url}}" alt="">
+                                <a href="{% url 'channel-profile' v.user.channel.id %}"><img src="{{ v.user.channel.image.url}}" alt=""></a>
+                                
                             </div>
                             <div class="title">
                                 <a href="{% url 'video-detail' v.id %}"><h3>{{v.title|truncatechars:35}}</h3></a>
